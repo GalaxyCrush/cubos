@@ -13,17 +13,18 @@
 #include "obstacle.hpp"
 #include "player.hpp"
 #include "spawner.hpp"
+#include "total_time.hpp"
 
 using namespace cubos::engine;
 
-static const Asset<Scene> SceneAsset = AnyAsset("/assets/scenes/main.cubos");
-static const Asset<VoxelPalette> PaletteAsset = AnyAsset("/assets/main.pal");
-static const Asset<InputBindings> InputBindingsAsset = AnyAsset("/assets/input.bind");
-
-int main(int argc, char** argv)
+static const Asset<Scene> SceneAsset = AnyAsset("ee5bb451-05b7-430f-a641-a746f7009eef");
+static const Asset<VoxelPalette> PaletteAsset = AnyAsset("101da567-3d23-46ae-a391-c10ec00e8718");
+static const Asset<InputBindings> InputBindingsAsset = AnyAsset("b20900a4-20ee-4caa-8830-14585050bead");
+int main()
 {
     Cubos cubos{argc, argv};
 
+    cubos.plugin(timePlugin);
     cubos.plugin(defaultsPlugin);
     cubos.plugin(freeCameraPlugin);
     cubos.plugin(toolsPlugin);
@@ -49,26 +50,33 @@ int main(int argc, char** argv)
         });
 
     cubos.system("restart the game on input")
-        .call([](Commands cmds, const Assets& assets, const Input& input, Query<Entity> all) {
+        .call([](Commands cmds, const Assets& assets, const Input& input, Query<Entity> all, TotalTime& time) {
             if (input.justPressed("restart"))
             {
                 for (auto [ent] : all)
                 {
                     cmds.destroy(ent);
                 }
-
+                time.time = 0.0F;
                 cmds.spawn(assets.read(SceneAsset)->blueprint);
             }
         });
 
     cubos.system("detect player vs obstacle collisions")
-        .call([](Query<const Player&, const CollidingWith&, const Obstacle&> collisions) {
+        .call([](Commands cmds, const Assets& assets,
+                 Query<const Player&, const CollidingWith&, const Obstacle&> collisions, Query<Entity> all,
+                 TotalTime& time) {
             for (auto [player, collidingWith, obstacle] : collisions)
             {
+                for (auto [ent] : all)
+                {
+                    cmds.destroy(ent);
+                }
                 CUBOS_INFO("Player collided with an obstacle!");
                 (void)player; // here to shut up 'unused variable warning', you can remove it
+                time.time = 0.0F;
+                cmds.spawn(assets.read(SceneAsset)->blueprint);
             }
         });
-
     cubos.run();
 }
