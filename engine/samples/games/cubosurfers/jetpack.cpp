@@ -17,7 +17,6 @@
 #include <cubos/engine/transform/plugin.hpp>
 #include <cubos/engine/voxels/plugin.hpp>
 
-#include "obstacle.hpp"
 #include "player.hpp"
 #include "spawner.hpp"
 #include "total_time.hpp"
@@ -45,7 +44,6 @@ void jetpackPlugin(cubos::engine::Cubos& cubos)
     cubos.depends(voxelsPlugin);
     cubos.depends(spawnerPlugin);
     cubos.depends(collisionsPlugin);
-    // cubos.depends(obstaclePlugin);
     cubos.depends(playerPlugin);
     cubos.depends(timePlugin);
 
