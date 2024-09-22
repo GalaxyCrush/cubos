@@ -9,7 +9,6 @@
 struct UIGui
 {
     CUBOS_REFLECT;
-    std::string info;
 };
 
 void UIGuiPlugin(cubos::engine::Cubos& cubos);

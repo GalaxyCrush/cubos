@@ -32,23 +32,50 @@
 #include <cubos/engine/transform/plugin.hpp>
 #include <cubos/engine/voxels/plugin.hpp>
 #include <cubos/engine/window/plugin.hpp>
+
+#include "armor.hpp"
+#include "jetpack.hpp"
+#include "player.hpp"
+#include "total_time.hpp"
+
 using namespace cubos::engine;
 
 CUBOS_REFLECT_IMPL(UIGui)
 {
-    return cubos::core::ecs::TypeBuilder<UIGui>("UiGui").withField("info", &UIGui::info).build();
+    return cubos::core::ecs::TypeBuilder<UIGui>("UiGui").build();
 }
 
 void UIGuiPlugin(cubos::engine::Cubos& cubos)
 {
+    cubos.depends(settingsPlugin);
+    cubos.depends(windowPlugin);
+    cubos.depends(renderTargetPlugin);
+    cubos.depends(imguiPlugin);
+    cubos.depends(timePlugin);
+    cubos.depends(playerPlugin);
+    cubos.depends(jetpackPlugin);
+    cubos.depends(armorPlugin);
 
     cubos.resource<UIGui>();
 
-    cubos.system("UI").call([](Commands cmds, UIGui& ui) {
-        ImGui::Begin("UI");
-        ImGui::Text("Info: %s", ui.info.c_str());
-        ImGui::End();
-        (void)cmds;
-    });
+    cubos.system("UI").tagged(imguiTag).call(
+        [](Commands cmds, Query<Player&, Armor&> hasArmor, Query<Player&, Jetpack&> hasJetpack, TotalTime& time) {
+            ImGui::Begin("UI");
+            ImGui::SetWindowSize(ImVec2(200, 100));
+            ImGui::Text("Score: %f", time.time);
+            for (auto [player, armor] : hasArmor)
+            {
+                if (armor.active)
+                {
+                    ImGui::Text("Player has a Shield!!!");
+                }
+            }
+            for (auto [player, jetpack] : hasJetpack)
+            {
+                ImGui::Text("Player has a Jetpack!!!");
+            }
+            ImGui::End();
+            (void)cmds;
+        });
     return;
 }
