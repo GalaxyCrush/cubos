@@ -97,7 +97,7 @@ void jetpackPlugin(cubos::engine::Cubos& cubos)
                 cmds.add<Jetpack>(playerEnt, Jetpack{3.0F})
                     .add<RenderVoxelGrid>(playerEnt, RenderVoxelGrid{PlayerAsset, glm::vec3{-4.0F, 0.0F, -4.0F}});
                 cmds.destroy(jetpackEnt);
-                playerPos.vec.y = 1000.0F;
+                playerComp.isUp = 15.0F;
             }
         });
 
@@ -109,7 +109,7 @@ void jetpackPlugin(cubos::engine::Cubos& cubos)
                 jetpackComp.activeTime -= dt.value();
                 if (jetpackComp.activeTime > 0.0F)
                 {
-                    position.vec.y = 1000.0F;
+                    playerComp.isUp = 15.0F;
                 }
                 else
                 {
@@ -117,6 +117,7 @@ void jetpackPlugin(cubos::engine::Cubos& cubos)
                     cmds.remove<RenderVoxelGrid>(playerEnt);
                     cmds.add<RenderVoxelGrid>(playerEnt,
                                               RenderVoxelGrid{PlayerNormalAsset, glm::vec3{-4.0F, 0.0F, -4.0F}});
+                    playerComp.isUp = 0.0F;
                 }
             }
         });
