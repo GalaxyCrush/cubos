@@ -3,6 +3,7 @@
 #include <cubos/engine/defaults/plugin.hpp>
 #include <cubos/engine/input/plugin.hpp>
 #include <cubos/engine/render/lights/environment.hpp>
+#include <cubos/engine/render/voxels/grid.hpp>
 #include <cubos/engine/render/voxels/palette.hpp>
 #include <cubos/engine/scene/plugin.hpp>
 #include <cubos/engine/settings/plugin.hpp>
@@ -10,6 +11,7 @@
 #include <cubos/engine/utils/free_camera/plugin.hpp>
 #include <cubos/engine/voxels/plugin.hpp>
 
+#include "armor.hpp"
 #include "obstacle.hpp"
 #include "player.hpp"
 #include "spawner.hpp"
@@ -20,17 +22,21 @@ using namespace cubos::engine;
 static const Asset<Scene> SceneAsset = AnyAsset("ee5bb451-05b7-430f-a641-a746f7009eef");
 static const Asset<VoxelPalette> PaletteAsset = AnyAsset("101da567-3d23-46ae-a391-c10ec00e8718");
 static const Asset<InputBindings> InputBindingsAsset = AnyAsset("b20900a4-20ee-4caa-8830-14585050bead");
+static const Asset<Armor> ArmorAsset = AnyAsset("fd89da0f-72d2-4ef9-9297-f73ff2ca5c63");
+static const Asset<Player> PlayerAsset = AnyAsset("57d1b886-8543-4b8b-8f78-d911e9c4f896");
+
 int main()
 {
     Cubos cubos{argc, argv};
 
-    cubos.plugin(timePlugin);
     cubos.plugin(defaultsPlugin);
     cubos.plugin(freeCameraPlugin);
     cubos.plugin(toolsPlugin);
     cubos.plugin(spawnerPlugin);
-    cubos.plugin(obstaclePlugin);
     cubos.plugin(playerPlugin);
+    cubos.plugin(timePlugin);
+    cubos.plugin(armorPlugin);
+    cubos.plugin(obstaclePlugin);
 
     cubos.startupSystem("configure settings").before(settingsTag).call([](Settings& settings) {
         settings.setString("assets.app.osPath", APP_ASSETS_PATH);
@@ -64,18 +70,30 @@ int main()
 
     cubos.system("detect player vs obstacle collisions")
         .call([](Commands cmds, const Assets& assets,
-                 Query<const Player&, const CollidingWith&, const Obstacle&> collisions, Query<Entity> all,
-                 TotalTime& time) {
-            for (auto [player, collidingWith, obstacle] : collisions)
+                 Query<Entity, Player&, Armor&, const CollidingWith&, const Obstacle&, Entity> collisions,
+                 Query<Entity> all, TotalTime& time) {
+            for (auto [playerEnt, playerComp, armor, collidingWith, obstacleComp, obstacleEnt] : collisions)
             {
-                for (auto [ent] : all)
+                CUBOS_ERROR("Player collided with an obstacle! {}", armor.active);
+                if (armor.active)
                 {
-                    cmds.destroy(ent);
+                    cmds.destroy(obstacleEnt);
+                    cmds.remove<RenderVoxelGrid>(playerEnt);
+                    cmds.add<Armor>(playerEnt, Armor{false})
+                        .add<RenderVoxelGrid>(playerEnt, RenderVoxelGrid{PlayerAsset, glm::vec3{-4.0F, 0.0F, -4.0F}});
+                    CUBOS_INFO("Player collided with an obstacle, but armor is active!");
+                    continue;
                 }
-                CUBOS_INFO("Player collided with an obstacle!");
-                (void)player; // here to shut up 'unused variable warning', you can remove it
-                time.time = 0.0F;
-                cmds.spawn(assets.read(SceneAsset)->blueprint);
+                else
+                {
+                    for (auto [ent] : all)
+                    {
+                        cmds.destroy(ent);
+                    }
+                    CUBOS_INFO("Player collided with an obstacle!");
+                    time.time = 0.0F;
+                    cmds.spawn(assets.read(SceneAsset)->blueprint);
+                }
             }
         });
     cubos.run();

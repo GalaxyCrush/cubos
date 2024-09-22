@@ -12,7 +12,10 @@ using namespace cubos::engine;
 
 CUBOS_REFLECT_IMPL(TotalTime)
 {
-    return cubos::core::ecs::TypeBuilder<TotalTime>("TotalTime").withField("time", &TotalTime::time).build();
+    return cubos::core::ecs::TypeBuilder<TotalTime>("TotalTime")
+        .withField("time", &TotalTime::time)
+        .withField("shieldTime", &TotalTime::shieldTime)
+        .build();
 }
 
 void timePlugin(cubos::engine::Cubos& cubos)
@@ -21,6 +24,7 @@ void timePlugin(cubos::engine::Cubos& cubos)
     cubos.resource<TotalTime>();
     cubos.system("Count the total time").call([](Commands cmds, const DeltaTime& dt, TotalTime& time) {
         time.time += dt.value();
+        time.shieldTime += dt.value();
         (void)cmds;
     });
 }

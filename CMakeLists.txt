@@ -66,7 +66,7 @@ if(CCACHE_EXE AND CUBOS_USE_CCACHE)
             RESULT FILE_NOT_FOUND ONLY_IF_DIFFERENT)
 
             if (FILE_NOT_FOUND)
-                set(CCACHE_PATH C:/mingw64/bin/ccache.exe)
+                set(CCACHE_PATH C:/msys64/mingw64/bin/ccache.exe)
                 file(COPY_FILE
                     ${CCACHE_PATH} ${CMAKE_BINARY_DIR}/cl.exe
                     ONLY_IF_DIFFERENT)

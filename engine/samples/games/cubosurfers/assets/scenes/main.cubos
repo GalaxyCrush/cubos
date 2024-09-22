@@ -29,6 +29,9 @@
             "Player": {
                 "speed": 5,
                 "laneWidth": 9
+            },
+            "Armor":{
+                "active": false
             }
         },
         "track1": {

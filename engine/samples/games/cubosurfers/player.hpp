@@ -2,6 +2,8 @@
 
 #include <cubos/engine/prelude.hpp>
 
+#include "armor.hpp"
+
 struct Player
 {
     CUBOS_REFLECT;
