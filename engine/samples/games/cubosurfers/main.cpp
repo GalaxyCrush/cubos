@@ -10,6 +10,7 @@
 #include <cubos/engine/voxels/plugin.hpp>
 
 #include "armor.hpp"
+#include "imGuiP.hpp"
 #include "jetpack.hpp"
 #include "obstacle.hpp"
 #include "player.hpp"
@@ -34,6 +35,7 @@ int main()
     cubos.plugin(armorPlugin);
     cubos.plugin(jetpackPlugin);
     cubos.plugin(obstaclePlugin);
+    cubos.plugin(UIGuiPlugin);
 
     cubos.startupSystem("configure settings").tagged(settingsTag).call([](Settings& settings) {
         settings.setString("assets.io.path", SAMPLE_ASSETS_FOLDER);
