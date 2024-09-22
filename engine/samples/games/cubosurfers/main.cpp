@@ -12,11 +12,11 @@
 #include <cubos/engine/voxels/plugin.hpp>
 
 #include "armor.hpp"
+#include "jetpack.hpp"
 #include "obstacle.hpp"
 #include "player.hpp"
 #include "spawner.hpp"
 #include "total_time.hpp"
-
 using namespace cubos::engine;
 
 static const Asset<Scene> SceneAsset = AnyAsset("ee5bb451-05b7-430f-a641-a746f7009eef");
@@ -36,6 +36,7 @@ int main()
     cubos.plugin(playerPlugin);
     cubos.plugin(timePlugin);
     cubos.plugin(armorPlugin);
+    cubos.plugin(jetpackPlugin);
     cubos.plugin(obstaclePlugin);
 
     cubos.startupSystem("configure settings").before(settingsTag).call([](Settings& settings) {
