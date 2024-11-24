@@ -8,7 +8,6 @@
 #include <cubos/engine/assets/plugin.hpp>
 #include <cubos/engine/transform/plugin.hpp>
 
-#include "total_time.hpp"
 using namespace cubos::engine;
 
 CUBOS_REFLECT_IMPL(Obstacle)
@@ -23,20 +22,16 @@ void obstaclePlugin(Cubos& cubos)
 {
     cubos.depends(assetsPlugin);
     cubos.depends(transformPlugin);
-    cubos.depends(timePlugin);
 
     cubos.component<Obstacle>();
 
     cubos.system("move obstacles")
-        .call([](Commands cmds, const DeltaTime& dt, Query<Entity, Obstacle&, Position&> obstacles,
-                 TotalTime& totalTime) {
+        .call([](Commands cmds, const DeltaTime& dt, Query<Entity, const Obstacle&, Position&> obstacles) {
             for (auto [ent, obstacle, position] : obstacles)
             {
-                obstacle.velocity.z -= (0.01F * totalTime.time);
                 position.vec += obstacle.velocity * dt.value();
                 position.vec.y = glm::abs(glm::sin(position.vec.z * 0.15F)) * 1.5F;
-                // CUBOS_INFO("Obstacle velocity: ({}, {}, {}); Velocity: {}", obstacle.velocity.x, obstacle.velocity.y,
-                //            obstacle.velocity.z, totalTime.time);
+
                 if (position.vec.z < obstacle.killZ)
                 {
                     cmds.destroy(ent);
