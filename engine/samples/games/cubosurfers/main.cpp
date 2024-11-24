@@ -26,7 +26,7 @@ static const Asset<InputBindings> InputBindingsAsset = AnyAsset("b20900a4-20ee-4
 static const Asset<Armor> ArmorAsset = AnyAsset("fd89da0f-72d2-4ef9-9297-f73ff2ca5c63");
 static const Asset<Player> PlayerAsset = AnyAsset("57d1b886-8543-4b8b-8f78-d911e9c4f896");
 
-int main()
+int main(int argc, char* argv[])
 {
     Cubos cubos{argc, argv};
 

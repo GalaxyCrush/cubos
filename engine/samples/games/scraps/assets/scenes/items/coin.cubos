@@ -1,0 +1,23 @@
+{
+  "entities": {
+    "coin": {
+      "cubos::engine::RenderVoxelGrid": {
+        "asset": "658ffcae-49db-49aa-9fb2-fc5f1ed90a7c",
+        "offset": {
+          "x": -4.0,
+          "y": 0.0,
+          "z": -4.0
+        }
+      },
+      "cubos::engine::Position": {},
+      "cubos::engine::Rotation": {},
+      "demo::Coin": {},
+      "demo::Holdable": true,
+      "demo::Health": {
+        "hp": 1,
+        "team": 0
+      }
+    }
+  },
+  "imports": {}
+}

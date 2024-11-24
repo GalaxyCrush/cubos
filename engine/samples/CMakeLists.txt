@@ -31,6 +31,7 @@ macro(make_sample)
             BUILTIN_ASSETS_PATH="${CUBOS_ENGINE_ASSETS_PATH}"
         )
     endif()
+    
 endmacro()
 # Add samples
 make_sample(DIR "hello-cubos")
@@ -52,3 +53,11 @@ make_sample(DIR "ui" ASSETS)
 make_sample(DIR "physics" ASSETS)
 make_sample(DIR "complex_physics" ASSETS)
 make_sample(DIR "games/cubosurfers" ASSETS SOURCES "spawner.cpp" "obstacle.cpp" "player.cpp" "total_time.cpp" "armor.cpp" "jetpack.cpp" "imGuiP.cpp")
+make_sample(DIR "games/block_the_steam" ASSETS)
+make_sample(DIR "games/scraps" ASSETS SOURCES "src/breakable/plugin.cpp"
+ "src/day_night/plugin.cpp" "src/displays/plugin.cpp" "src/follow/plugin.cpp"
+ "src/hammer/plugin.cpp" "src/health/plugin.cpp" "src/holdable/plugin.cpp"
+ "src/interaction/plugin.cpp" "src/object/plugin.cpp" "src/path_finding/plugin.cpp"
+ "src/player_controller/plugin.cpp" "src/player_spawn_point/plugin.cpp" "src/progression/plugin.cpp"
+ "src/shop/plugin.cpp" "src/skip/plugin.cpp" "src/tile_map/plugin.cpp" "src/tile_map_generator/plugin.cpp"
+ "src/turret/plugin.cpp" "src/walker/plugin.cpp" "src/waves/plugin.cpp" "src/zombie/plugin.cpp")
