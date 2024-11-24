@@ -19,14 +19,19 @@
                 "z": 0
             },
             "cubos::engine::BoxCollisionShape": {
-                "x": 3.0,
-                "y": 7.0,
-                "z": 2.0
+                "box": {
+                    "x": 3.0,
+                    "y": 7.0,
+                    "z": 2.0
+                }
             },
             "cubos::engine::Collider": {},
             "Player": {
                 "speed": 5,
                 "laneWidth": 9
+            },
+            "Armor":{
+                "active": false
             }
         },
         "track1": {

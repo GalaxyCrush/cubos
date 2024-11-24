@@ -53,7 +53,7 @@ make_sample(DIR "ui" ASSETS)
 make_sample(DIR "physics" ASSETS)
 make_sample(DIR "complex_physics" ASSETS)
 make_sample(DIR "games/cubosurfers" ASSETS SOURCES "spawner.cpp" "obstacle.cpp" "player.cpp" "total_time.cpp" "armor.cpp" "jetpack.cpp" "imGuiP.cpp")
-make_sample(DIR "games/block_the_steam" ASSETS)
+# make_sample(DIR "games/block_the_steam" ASSETS)
 make_sample(DIR "games/scraps" ASSETS SOURCES "src/breakable/plugin.cpp"
  "src/day_night/plugin.cpp" "src/displays/plugin.cpp" "src/follow/plugin.cpp"
  "src/hammer/plugin.cpp" "src/health/plugin.cpp" "src/holdable/plugin.cpp"

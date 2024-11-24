@@ -43,7 +43,7 @@ void playerPlugin(Cubos& cubos)
                 float currentT = (position.vec.x - sourceX) / (targetX - sourceX);
                 float newT = glm::min(1.0F, currentT + dt.value() * player.speed);
                 position.vec.x = glm::mix(sourceX, targetX, newT);
-                position.vec.y = glm::sin(currentT * glm::pi<float>()) * 2.0F;
+                position.vec.y = glm::sin(currentT * glm::pi<float>()) * 2.0F + player.isUp;
 
                 if (newT == 1.0F)
                 {
@@ -52,7 +52,7 @@ void playerPlugin(Cubos& cubos)
             }
             else
             {
-                position.vec.y = 0;
+                position.vec.y = player.isUp;
             }
         }
     });
